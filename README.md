@@ -1,6 +1,6 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## 1.Install
+## 1. Install
 
 ### npm
 
@@ -16,7 +16,7 @@ npm i --legacy-peer-deps
 yarn install
 ```
 
-## 2.Start
+## 2. Start
 
 ```sh
 npm start
@@ -24,7 +24,7 @@ or
 yarn start
 ```
 
-## 3.Build
+## 3. Build
 
 ```sh
 npm run build or yarn build
