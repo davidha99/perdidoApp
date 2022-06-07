@@ -3,7 +3,7 @@ import orderBy from "lodash/orderBy";
 // form
 import { useForm } from "react-hook-form";
 // @mui
-import { Container, Typography, Stack } from "@mui/material";
+import { Container, Typography, Stack, TextField, MenuItem } from "@mui/material";
 // redux
 import { useDispatch, useSelector } from "../../redux/store";
 import { getProducts, filterProducts } from "../../redux/slices/product";
@@ -24,6 +24,7 @@ import {
   ShopProductSearch,
 } from "../../sections/@dashboard/e-commerce/shop";
 import CartWidget from "../../sections/@dashboard/e-commerce/CartWidget";
+import Select from "src/theme/overrides/Select";
 
 // ----------------------------------------------------------------------
 
@@ -54,6 +55,8 @@ export default function EcommerceShop() {
 
   const values = watch();
 
+  let [searchType, setSearchType] = useState("Todos");
+
   const isDefault =
     !values.priceRange &&
     !values.rating &&
@@ -62,8 +65,8 @@ export default function EcommerceShop() {
     values.category === "All";
 
   useEffect(() => {
-    dispatch(getProducts());
-  }, [dispatch]);
+    dispatch(getProducts(searchType));
+  }, [dispatch, searchType]);
 
   useEffect(() => {
     dispatch(filterProducts(values));
@@ -104,6 +107,10 @@ export default function EcommerceShop() {
     setValue("rating", "");
   };
 
+  const handleChange = (e) => {
+    setSearchType(e.target.value);
+  };
+
   return (
     <Page title="Ecommerce: Shop">
       <Container maxWidth={themeStretch ? false : "lg"}>
@@ -123,12 +130,37 @@ export default function EcommerceShop() {
           justifyContent="space-between"
           sx={{ mb: 2 }}
         >
-          <ShopProductSearch />
+          <ShopProductSearch reportType={searchType} />
 
           <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}></Stack>
         </Stack>
+        <Stack
+          spacing={2}
+          direction={{ xs: "column", sm: "row" }}
+          alignItems={{ sm: "center" }}
+          justifyContent="space-between"
+          sx={{ mb: 2 }}
+        >
+          <TextField
+            select={true}
+            label="hello"
+            sx={{ mt: 2, width: "15rem" }}
+            onChange={(e) => handleChange(e)}
+            value={searchType}
+          >
+            <MenuItem value="Perdido">Perdido</MenuItem>
+            <MenuItem value="Encontrado">Encontrado</MenuItem>
+            <MenuItem value="Todos">Todos</MenuItem>
+          </TextField>
+        </Stack>
 
-        <ShopProductList products={filteredProducts} loading={!products.length && isDefault} />
+        {filteredProducts.length > 0 ? (
+          <ShopProductList products={filteredProducts} loading={!products.length && isDefault} />
+        ) : (
+          <Typography sx={{ mt: 4, textAlign: "center" }} variant="h5">
+            No hay resultados
+          </Typography>
+        )}
       </Container>
     </Page>
   );

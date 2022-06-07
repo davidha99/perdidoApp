@@ -8,7 +8,7 @@ import { dispatch } from "../store";
 import { _ecommerceLatestProducts, _ecommerceNewProducts } from "../../_mock";
 import { randomNumber } from "../../_mock/funcs";
 
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, limit, query, where } from "firebase/firestore";
 import { DB } from "src/contexts/FirebaseContext";
 
 // ----------------------------------------------------------------------
@@ -215,22 +215,30 @@ export const {
 
 // ----------------------------------------------------------------------
 
-export function getProducts() {
+export function getProducts(searchType) {
   return async () => {
     dispatch(slice.actions.startLoading());
 
     let products = [];
     try {
-      const querySnapshot = await getDocs(collection(DB, "object"));
+      const ref = collection(DB, "object");
+      let q = "";
+      if (searchType === "Todos") {
+        q = query(ref);
+      } else {
+        q = query(ref, where("reportType", "==", searchType));
+      }
+
+      const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
-
         products.push({
           id: doc.id,
           key: doc.id,
           ...doc.data(),
         });
       });
+
       dispatch(slice.actions.getProductsSuccess(products));
     } catch (error) {
       dispatch(slice.actions.hasError(error));

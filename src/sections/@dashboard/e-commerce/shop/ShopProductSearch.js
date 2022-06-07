@@ -31,7 +31,7 @@ const PopperStyle = styled((props) => <Popper placement="bottom-start" {...props
 
 // ----------------------------------------------------------------------
 
-export default function ShopProductSearch() {
+export default function ShopProductSearch({ reportType }) {
   const navigate = useNavigate();
 
   const isMountedRef = useIsMountedRef();
@@ -46,7 +46,13 @@ export default function ShopProductSearch() {
       if (value) {
         let results = [];
         const ref = collection(DB, "object");
-        const q = query(ref, limit(10));
+
+        let q = "";
+        if (reportType === "Todos") {
+          q = query(ref);
+        } else {
+          q = query(ref, where("reportType", "==", reportType));
+        }
 
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {

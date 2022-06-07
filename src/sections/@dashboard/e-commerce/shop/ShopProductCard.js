@@ -19,7 +19,7 @@ ShopProductCard.propTypes = {
 };
 
 export default function ShopProductCard({ product }) {
-  const { title, id, reporter, images, category, status, place_found } = product;
+  const { title, id, reporter, images, reportType, category, status, place_found } = product;
   let { id: reporterId, displayName } = reporter;
 
   const linkTo = PATH_DASHBOARD.eCommerce.view(id);
@@ -54,19 +54,14 @@ export default function ShopProductCard({ product }) {
         </Link>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-          {/*<ColorPreview colors={colors} />*/}
+          <Typography variant="overline" sx={{ color: "text.disabled" }}>
+            {category}
+          </Typography>
 
-          <Stack direction="row" spacing={0.5}>
-            {/*{priceSale && (*/}
-            {/*  <Typography component="span" sx={{ color: 'text.disabled', textDecoration: 'line-through' }}>*/}
-            {/*    {fCurrency(priceSale)}*/}
-            {/*  </Typography>*/}
-            {/*)}*/}
-
-            <Typography variant="body2" sx={{ color: "text.disabled" }}>
-              {place_found}
-            </Typography>
-          </Stack>
+          <Stack direction="row" spacing={0.5}></Stack>
+          <Typography variant="caption" noWrap>
+            {reportType}
+          </Typography>
         </Stack>
       </Stack>
     </Card>

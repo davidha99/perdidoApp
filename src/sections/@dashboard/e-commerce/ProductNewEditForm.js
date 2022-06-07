@@ -47,6 +47,8 @@ const CATEGORY_OPTION = [
   // { group: "Accessories", classify: ["Shoes", "Backpacks and bags", "Bracelets", "Face masks"] },
 ];
 
+const REPORT_OPTION = ["Encontrado", "Perdido"];
+
 const TAGS_OPTION = [
   "Toy Story 3",
   "Logan",
@@ -86,7 +88,7 @@ export default function ProductNewEditForm({ isEdit, currentProduct }) {
     // description: Yup.string().required("Description is required"),
     images: Yup.array().min(0, "Images is required").max(5, "Max 5 images"),
     category: Yup.string().required("Category is required"),
-    place_found: Yup.string().required("Place found is required"),
+    reportType: Yup.string().required("Report Type is required"),
   });
 
   const defaultValues = useMemo(
@@ -94,8 +96,8 @@ export default function ProductNewEditForm({ isEdit, currentProduct }) {
       title: currentProduct?.title || "",
       description: currentProduct?.description || "",
       images: currentProduct?.images || [],
-      // place_found: currentProduct?.place_found || "",
       category: currentProduct?.category || CATEGORY_OPTION[0].classify[1],
+      reportType: currentProduct?.reportType || REPORT_OPTION[0],
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentProduct]
@@ -140,12 +142,12 @@ export default function ProductNewEditForm({ isEdit, currentProduct }) {
         title: values.title,
         category: [values.category],
         description: values.description,
-        place_found: values.place_found,
         reporter: {
           id: user.id,
           displayName: user.displayName,
           email: user.email,
         },
+        reportType: values.reportType,
         images: urls,
         createdAt: new Date(),
         createdBy: {
@@ -192,7 +194,7 @@ export default function ProductNewEditForm({ isEdit, currentProduct }) {
     const storage = getStorage();
 
     let urls = [];
-    enqueueSnackbar("Subiendo images...", { variant: "info" });
+    enqueueSnackbar("Subiendo imagenes...");
 
     images.forEach(async (image) => {
       const storageRef = ref(storage, `images/${image.name}`);
@@ -204,7 +206,7 @@ export default function ProductNewEditForm({ isEdit, currentProduct }) {
         })
         .then(() => {
           setUrls(urls);
-          enqueueSnackbar("Se subieron las imagenes");
+          enqueueSnackbar("Se subieron las imagenes al servidor");
         })
         .catch((error) => {
           console.error(error);
@@ -224,6 +226,13 @@ export default function ProductNewEditForm({ isEdit, currentProduct }) {
         <Grid item xs={12} md={8}>
           <Card sx={{ p: 3 }}>
             <Stack spacing={3}>
+              <RHFSelect name="reportType" label="Tipo de Reporte">
+                {REPORT_OPTION.map((type, index) => (
+                  <option key={index} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </RHFSelect>
               <RHFTextField name="title" label="Titulo" />
 
               <div>
@@ -253,8 +262,6 @@ export default function ProductNewEditForm({ isEdit, currentProduct }) {
             <Card sx={{ p: 3 }}>
               <Stack spacing={3} mt={2}>
                 <RHFTextField name="reporter" label="Reportado Por" disabled value={user.displayName} />
-
-                <RHFTextField name="place_found" label="Encontrado En" />
 
                 <RHFSelect name="category" label="Category">
                   {CATEGORY_OPTION.map((category) => (

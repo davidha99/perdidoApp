@@ -105,6 +105,7 @@ export default function ProductDetailsSummary({ cart, product, onAddCart, onGoto
 
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 3 }}>
           <Markdown>{description}</Markdown>
+          <Typography variant="overline">{category}</Typography>
         </Stack>
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 3 }}>
           <Typography variant="overline">Encontrado en: {place_found}</Typography>
