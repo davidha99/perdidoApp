@@ -22,7 +22,7 @@ export default function ShopProductCard({ product }) {
   const { title, id, reporter, images, category, status, place_found } = product;
   let { id: reporterId, displayName } = reporter;
 
-  const linkTo = PATH_DASHBOARD.eCommerce.view(paramCase(id));
+  const linkTo = PATH_DASHBOARD.eCommerce.view(id);
 
   return (
     <Card>

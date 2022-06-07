@@ -162,7 +162,7 @@ export default function Router() {
       ),
       children: [
         { element: <HomePage />, index: true },
-        { path: "/product/:name", element: <EcommerceProductDetails /> },
+        { path: "/product/:id", element: <EcommerceProductDetails /> },
         { path: "/product/new", element: <EcommerceProductCreate /> },
 
         { path: "about-us", element: <About /> },

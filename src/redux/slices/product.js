@@ -8,7 +8,7 @@ import { dispatch } from "../store";
 import { _ecommerceLatestProducts, _ecommerceNewProducts } from "../../_mock";
 import { randomNumber } from "../../_mock/funcs";
 
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { DB } from "src/contexts/FirebaseContext";
 
 // ----------------------------------------------------------------------
@@ -240,14 +240,25 @@ export function getProducts() {
 
 // ----------------------------------------------------------------------
 
-export function getProduct(name) {
+export function getProduct(id) {
   return async () => {
     dispatch(slice.actions.startLoading());
+    let data = {};
     try {
-      const response = await axios.get("/api/products/product", {
-        params: { name },
-      });
-      dispatch(slice.actions.getProductSuccess());
+      const docRef = doc(DB, "object", id);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        data = {
+          id: docSnap.id,
+          key: docSnap.id,
+          ...docSnap.data(),
+        };
+        dispatch(slice.actions.getProductSuccess(data));
+      } else {
+        // doc.data() will be undefined in this case
+        dispatch(slice.actions.hasError("No such document!"));
+      }
     } catch (error) {
       console.error(error);
       dispatch(slice.actions.hasError(error));
