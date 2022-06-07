@@ -1,12 +1,12 @@
-import PropTypes from 'prop-types';
-import { useState } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import PropTypes from "prop-types";
+import { useState } from "react";
+import { Navigate, useLocation } from "react-router-dom";
 // hooks
-import useAuth from '../hooks/useAuth';
+import useAuth from "../hooks/useAuth";
 // pages
-import Login from '../pages/auth/Login';
+import Login from "../pages/auth/Login";
 // components
-import LoadingScreen from '../components/LoadingScreen';
+import LoadingScreen from "../components/LoadingScreen";
 
 // ----------------------------------------------------------------------
 
@@ -22,6 +22,7 @@ export default function AuthGuard({ children }) {
   const [requestedLocation, setRequestedLocation] = useState(null);
 
   if (!isInitialized) {
+    console.log(isInitialized);
     return <LoadingScreen />;
   }
 
