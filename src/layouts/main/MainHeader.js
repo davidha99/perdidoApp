@@ -2,6 +2,8 @@ import { useLocation } from "react-router-dom";
 // @mui
 import { styled, useTheme } from "@mui/material/styles";
 import { Box, Button, AppBar, Toolbar, Container, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+
 // hooks
 import useOffSetTop from "../../hooks/useOffSetTop";
 import useResponsive from "../../hooks/useResponsive";
@@ -10,12 +12,12 @@ import cssStyles from "../../utils/cssStyles";
 // config
 import { HEADER } from "../../config";
 // components
-import Logo from "../../components/Logo";
 import Label from "../../components/Label";
 //
 import MenuDesktop from "./MenuDesktop";
 import MenuMobile from "./MenuMobile";
 import navConfig from "./MenuConfig";
+import useAuth from "src/hooks/useAuth";
 
 // ----------------------------------------------------------------------
 
@@ -54,6 +56,10 @@ export default function MainHeader() {
 
   const isDesktop = useResponsive("up", "md");
 
+  const navigate = useNavigate();
+
+  const { user, logout } = useAuth();
+
   const isHome = pathname === "/";
 
   return (
@@ -89,9 +95,23 @@ export default function MainHeader() {
             variant="contained"
             // target="_blank"
             rel="noopener"
-            href="http://localhost:3000/product/new"
+            onClick={() => navigate("/product/new")}
           >
             Reportar
+          </Button>
+
+          <Button
+            sx={{ mx: 2 }}
+            onClick={() => {
+              logout();
+              navigate("/");
+            }}
+            variant="contained"
+            // target="_blank"
+            color="secondary"
+            rel="noopener"
+          >
+            Cerrar Sesion
           </Button>
 
           {!isDesktop && <MenuMobile isOffset={isOffset} isHome={isHome} navConfig={navConfig} />}
