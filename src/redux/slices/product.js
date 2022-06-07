@@ -1,12 +1,15 @@
-import { createSlice } from '@reduxjs/toolkit';
-import sum from 'lodash/sum';
-import uniqBy from 'lodash/uniqBy';
+import { createSlice } from "@reduxjs/toolkit";
+import sum from "lodash/sum";
+import uniqBy from "lodash/uniqBy";
 // utils
-import axios from '../../utils/axios';
+import axios from "../../utils/axios";
 //
-import { dispatch } from '../store';
-import {_ecommerceLatestProducts, _ecommerceNewProducts} from "../../_mock";
-import {randomNumber} from "../../_mock/funcs";
+import { dispatch } from "../store";
+import { _ecommerceLatestProducts, _ecommerceNewProducts } from "../../_mock";
+import { randomNumber } from "../../_mock/funcs";
+
+import { collection, getDocs } from "firebase/firestore";
+import { DB } from "src/contexts/FirebaseContext";
 
 // ----------------------------------------------------------------------
 
@@ -18,10 +21,10 @@ const initialState = {
   sortBy: null,
   filters: {
     gender: [],
-    category: 'All',
+    category: "All",
     colors: [],
-    priceRange: '',
-    rating: '',
+    priceRange: "",
+    rating: "",
   },
   checkout: {
     activeStep: 0,
@@ -35,7 +38,7 @@ const initialState = {
 };
 
 const slice = createSlice({
-  name: 'product',
+  name: "product",
   initialState,
   reducers: {
     // START LOADING
@@ -109,7 +112,7 @@ const slice = createSlice({
           return _product;
         });
       }
-      state.checkout.cart = uniqBy([...state.checkout.cart, product], 'id');
+      state.checkout.cart = uniqBy([...state.checkout.cart, product], "id");
     },
 
     deleteCart(state, action) {
@@ -215,16 +218,20 @@ export const {
 export function getProducts() {
   return async () => {
     dispatch(slice.actions.startLoading());
+
+    let products = [];
     try {
-      // const response = await axios.get('/api/products');
-      let items = _ecommerceLatestProducts.map(item => {
-        let x = randomNumber(600) + 200
-        return {
-          ...item,
-          image: "https://picsum.photos/"+x
-        }
-      })
-      dispatch(slice.actions.getProductsSuccess(items));
+      const querySnapshot = await getDocs(collection(DB, "object"));
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+
+        products.push({
+          id: doc.id,
+          key: doc.id,
+          ...doc.data(),
+        });
+      });
+      dispatch(slice.actions.getProductsSuccess(products));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -237,7 +244,7 @@ export function getProduct(name) {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/products/product', {
+      const response = await axios.get("/api/products/product", {
         params: { name },
       });
       dispatch(slice.actions.getProductSuccess());

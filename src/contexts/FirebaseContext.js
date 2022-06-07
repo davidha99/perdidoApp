@@ -8,13 +8,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
-import {
-  getFirestore,
-  collection,
-  doc,
-  getDoc,
-  setDoc,
-} from "firebase/firestore";
+import { getFirestore, collection, doc, getDoc, setDoc } from "firebase/firestore";
 //
 import { FIREBASE_API } from "../config";
 
@@ -26,7 +20,7 @@ const firebaseApp = initializeApp(FIREBASE_API);
 
 const AUTH = getAuth(firebaseApp);
 
-const DB = getFirestore(firebaseApp);
+export const DB = getFirestore(firebaseApp);
 
 const initialState = {
   isAuthenticated: false,
@@ -99,14 +93,14 @@ function AuthProvider({ children }) {
     console.log(m);
   };
 
-  const register = (email, password, firstName, lastName) =>
+  const register = (email, password, firstName) =>
     createUserWithEmailAndPassword(AUTH, email, password).then(async (res) => {
       const userRef = doc(collection(DB, "users"), res.user?.uid);
 
       await setDoc(userRef, {
         uid: res.user?.uid,
         email,
-        displayName: `${firstName} ${lastName}`,
+        displayName: `${firstName}`,
       });
     });
 
