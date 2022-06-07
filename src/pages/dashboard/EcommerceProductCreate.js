@@ -1,19 +1,19 @@
-import { useEffect } from 'react';
-import { paramCase } from 'change-case';
-import { useParams, useLocation } from 'react-router-dom';
+import { useEffect } from "react";
+import { paramCase } from "change-case";
+import { useParams, useLocation } from "react-router-dom";
 // @mui
-import { Container } from '@mui/material';
+import { Container } from "@mui/material";
 // redux
-import { useDispatch, useSelector } from '../../redux/store';
-import { getProducts } from '../../redux/slices/product';
+import { useDispatch, useSelector } from "../../redux/store";
+import { getProducts } from "../../redux/slices/product";
 // routes
-import { PATH_DASHBOARD } from '../../routes/paths';
+import { PATH_DASHBOARD } from "../../routes/paths";
 // hooks
-import useSettings from '../../hooks/useSettings';
+import useSettings from "../../hooks/useSettings";
 // components
-import Page from '../../components/Page';
-import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import ProductNewEditForm from '../../sections/@dashboard/e-commerce/ProductNewEditForm';
+import Page from "../../components/Page";
+import HeaderBreadcrumbs from "../../components/HeaderBreadcrumbs";
+import ProductNewEditForm from "../../sections/@dashboard/e-commerce/ProductNewEditForm";
 
 // ----------------------------------------------------------------------
 
@@ -21,23 +21,23 @@ export default function EcommerceProductCreate() {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
   const { pathname } = useLocation();
-  const { name } = useParams();
+  const { id } = useParams();
   const { products } = useSelector((state) => state.product);
-  const isEdit = pathname.includes('edit');
-  const currentProduct = products.find((product) => paramCase(product.name) === name);
+  const isEdit = pathname.includes("edit");
+  const currentProduct = products.find((product) => paramCase(product.id) === id);
 
   useEffect(() => {
     dispatch(getProducts());
   }, [dispatch]);
 
   return (
-    <Page title="Ecommerce: Create a new product" sx={{py: 15}}>
-      <Container maxWidth={themeStretch ? false : 'lg'}>
+    <Page title="Reportar Objeto Perdido" sx={{ py: 15 }}>
+      <Container maxWidth={themeStretch ? false : "lg"}>
         <HeaderBreadcrumbs
-          heading={!isEdit ? 'Reportar objeto perdido' : 'Edit product'}
+          heading={!isEdit ? "Reportar objeto perdido" : "Editar objecto perdido"}
           links={[
             {
-              name: 'Home',
+              name: "Home",
               href: PATH_DASHBOARD.eCommerce.root,
             },
             { name: "Nuevo Reporte" },
