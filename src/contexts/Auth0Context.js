@@ -1,10 +1,10 @@
-import { createContext, useEffect, useReducer } from 'react';
-import PropTypes from 'prop-types';
-import { Auth0Client } from '@auth0/auth0-spa-js';
+import { createContext, useEffect, useReducer } from "react";
+import PropTypes from "prop-types";
+import { Auth0Client } from "@auth0/auth0-spa-js";
 // routes
-import { PATH_AUTH } from '../routes/paths';
+import { PATH_AUTH } from "../routes/paths";
 //
-import { AUTH0_API } from '../config';
+import { AUTH0_API } from "../config";
 
 // ----------------------------------------------------------------------
 
@@ -32,11 +32,12 @@ const handlers = {
   }),
 };
 
-const reducer = (state, action) => (handlers[action.type] ? handlers[action.type](state, action) : state);
+const reducer = (state, action) =>
+  handlers[action.type] ? handlers[action.type](state, action) : state;
 
 const AuthContext = createContext({
   ...initialState,
-  method: 'auth0',
+  method: "auth0",
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
 });
@@ -67,19 +68,19 @@ function AuthProvider({ children }) {
           const user = await auth0Client.getUser();
 
           dispatch({
-            type: 'INITIALIZE',
+            type: "INITIALIZE",
             payload: { isAuthenticated, user },
           });
         } else {
           dispatch({
-            type: 'INITIALIZE',
+            type: "INITIALIZE",
             payload: { isAuthenticated, user: null },
           });
         }
       } catch (err) {
         console.error(err);
         dispatch({
-          type: 'INITIALIZE',
+          type: "INITIALIZE",
           payload: { isAuthenticated: false, user: null },
         });
       }
@@ -89,32 +90,34 @@ function AuthProvider({ children }) {
   }, []);
 
   const login = async () => {
+    console.log("loooog");
+
     await auth0Client.loginWithPopup();
     const isAuthenticated = await auth0Client.isAuthenticated();
 
     if (isAuthenticated) {
       const user = await auth0Client.getUser();
-      dispatch({ type: 'LOGIN', payload: { user } });
+      dispatch({ type: "LOGIN", payload: { user } });
     }
   };
 
   const logout = () => {
     auth0Client.logout();
     window.location.href = PATH_AUTH.login;
-    dispatch({ type: 'LOGOUT' });
+    dispatch({ type: "LOGOUT" });
   };
 
   return (
     <AuthContext.Provider
       value={{
         ...state,
-        method: 'auth0',
+        method: "auth0",
         user: {
           id: state?.user?.sub,
           photoURL: state?.user?.picture,
           email: state?.user?.email,
-          displayName: 'Jaydon Frankie',
-          role: 'admin',
+          displayName: "Jaydon Frankie",
+          role: "admin",
         },
         login,
         logout,

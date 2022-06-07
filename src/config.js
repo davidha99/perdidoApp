@@ -1,12 +1,12 @@
 // @mui
-import { enUS, frFR, zhCN, viVN, arSD } from '@mui/material/locale';
+import { enUS, frFR, zhCN, viVN, arSD } from "@mui/material/locale";
 // routes
-import { PATH_DASHBOARD } from './routes/paths';
+import { PATH_DASHBOARD } from "./routes/paths";
 
 // API
 // ----------------------------------------------------------------------
 
-export const HOST_API = process.env.REACT_APP_HOST_API_KEY || '';
+export const HOST_API = process.env.REACT_APP_HOST_API_KEY || "";
 
 export const FIREBASE_API = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -64,11 +64,11 @@ export const ICON = {
 // ----------------------------------------------------------------------
 
 export const defaultSettings = {
-  themeMode: 'light',
-  themeDirection: 'ltr',
-  themeContrast: 'default',
-  themeLayout: 'horizontal',
-  themeColorPresets: 'default',
+  themeMode: "light",
+  themeDirection: "ltr",
+  themeContrast: "default",
+  themeLayout: "horizontal",
+  themeColorPresets: "default",
   themeStretch: false,
 };
 
@@ -78,34 +78,34 @@ export const defaultSettings = {
 
 export const allLangs = [
   {
-    label: 'English',
-    value: 'en',
+    label: "English",
+    value: "en",
     systemValue: enUS,
-    icon: '/assets/icons/flags/ic_flag_en.svg',
+    icon: "/assets/icons/flags/ic_flag_en.svg",
   },
   {
-    label: 'French',
-    value: 'fr',
+    label: "French",
+    value: "fr",
     systemValue: frFR,
-    icon: '/assets/icons/flags/ic_flag_fr.svg',
+    icon: "/assets/icons/flags/ic_flag_fr.svg",
   },
   {
-    label: 'Vietnamese',
-    value: 'vn',
+    label: "Vietnamese",
+    value: "vn",
     systemValue: viVN,
-    icon: '/assets/icons/flags/ic_flag_vn.svg',
+    icon: "/assets/icons/flags/ic_flag_vn.svg",
   },
   {
-    label: 'Chinese',
-    value: 'cn',
+    label: "Chinese",
+    value: "cn",
     systemValue: zhCN,
-    icon: '/assets/icons/flags/ic_flag_cn.svg',
+    icon: "/assets/icons/flags/ic_flag_cn.svg",
   },
   {
-    label: 'Arabic (Sudan)',
-    value: 'ar',
+    label: "Arabic (Sudan)",
+    value: "ar",
     systemValue: arSD,
-    icon: '/assets/icons/flags/ic_flag_sa.svg',
+    icon: "/assets/icons/flags/ic_flag_sa.svg",
   },
 ];
 

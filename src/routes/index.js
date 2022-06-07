@@ -225,7 +225,7 @@ const HomePage = Loadable(lazy(() => import('../pages/Home')));
 const About = Loadable(lazy(() => import('../pages/About')));
 const Contact = Loadable(lazy(() => import('../pages/Contact')));
 const Faqs = Loadable(lazy(() => import('../pages/Faqs')));
-const ComingSoon = Loadable(lazy(() => import('../pages/ComingSoon')));
+const ComingSoon = Loadable(lazy(() => import('../pages/Login')));
 const Maintenance = Loadable(lazy(() => import('../pages/Maintenance')));
 const Pricing = Loadable(lazy(() => import('../pages/Pricing')));
 const Payment = Loadable(lazy(() => import('../pages/Payment')));

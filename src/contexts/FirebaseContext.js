@@ -1,20 +1,26 @@
-import PropTypes from 'prop-types';
-import { createContext, useEffect, useReducer, useState } from 'react';
-import { initializeApp } from 'firebase/app';
+import PropTypes from "prop-types";
+import { createContext, useEffect, useReducer, useState } from "react";
+import { initializeApp } from "firebase/app";
 import {
   getAuth,
   signOut,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-} from 'firebase/auth';
-import { getFirestore, collection, doc, getDoc, setDoc } from 'firebase/firestore';
+} from "firebase/auth";
+import {
+  getFirestore,
+  collection,
+  doc,
+  getDoc,
+  setDoc,
+} from "firebase/firestore";
 //
-import { FIREBASE_API } from '../config';
+import { FIREBASE_API } from "../config";
 
 // ----------------------------------------------------------------------
 
-const ADMIN_EMAILS = ['demo@minimals.cc'];
+const ADMIN_EMAILS = ["demo@minimals.cc"];
 
 const firebaseApp = initializeApp(FIREBASE_API);
 
@@ -29,7 +35,7 @@ const initialState = {
 };
 
 const reducer = (state, action) => {
-  if (action.type === 'INITIALISE') {
+  if (action.type === "INITIALISE") {
     const { isAuthenticated, user } = action.payload;
     return {
       ...state,
@@ -44,7 +50,7 @@ const reducer = (state, action) => {
 
 const AuthContext = createContext({
   ...initialState,
-  method: 'firebase',
+  method: "firebase",
   login: () => Promise.resolve(),
   register: () => Promise.resolve(),
   logout: () => Promise.resolve(),
@@ -65,7 +71,7 @@ function AuthProvider({ children }) {
     () =>
       onAuthStateChanged(AUTH, async (user) => {
         if (user) {
-          const userRef = doc(DB, 'users', user.uid);
+          const userRef = doc(DB, "users", user.uid);
 
           const docSnap = await getDoc(userRef);
 
@@ -74,12 +80,12 @@ function AuthProvider({ children }) {
           }
 
           dispatch({
-            type: 'INITIALISE',
+            type: "INITIALISE",
             payload: { isAuthenticated: true, user },
           });
         } else {
           dispatch({
-            type: 'INITIALISE',
+            type: "INITIALISE",
             payload: { isAuthenticated: false, user: null },
           });
         }
@@ -87,11 +93,15 @@ function AuthProvider({ children }) {
     [dispatch]
   );
 
-  const login = (email, password) => signInWithEmailAndPassword(AUTH, email, password);
+  const login = async (email, password) => {
+    console.log("logging in... man");
+    let m = await signInWithEmailAndPassword(AUTH, email, password);
+    console.log(m);
+  };
 
   const register = (email, password, firstName, lastName) =>
     createUserWithEmailAndPassword(AUTH, email, password).then(async (res) => {
-      const userRef = doc(collection(DB, 'users'), res.user?.uid);
+      const userRef = doc(collection(DB, "users"), res.user?.uid);
 
       await setDoc(userRef, {
         uid: res.user?.uid,
@@ -106,20 +116,20 @@ function AuthProvider({ children }) {
     <AuthContext.Provider
       value={{
         ...state,
-        method: 'firebase',
+        method: "firebase",
         user: {
           id: state?.user?.uid,
           email: state?.user?.email,
           photoURL: state?.user?.photoURL || profile?.photoURL,
           displayName: state?.user?.displayName || profile?.displayName,
-          role: ADMIN_EMAILS.includes(state?.user?.email) ? 'admin' : 'user',
-          phoneNumber: state?.user?.phoneNumber || profile?.phoneNumber || '',
-          country: profile?.country || '',
-          address: profile?.address || '',
-          state: profile?.state || '',
-          city: profile?.city || '',
-          zipCode: profile?.zipCode || '',
-          about: profile?.about || '',
+          role: ADMIN_EMAILS.includes(state?.user?.email) ? "admin" : "user",
+          phoneNumber: state?.user?.phoneNumber || profile?.phoneNumber || "",
+          country: profile?.country || "",
+          address: profile?.address || "",
+          state: profile?.state || "",
+          city: profile?.city || "",
+          zipCode: profile?.zipCode || "",
+          about: profile?.about || "",
           isPublic: profile?.isPublic || false,
         },
         login,
